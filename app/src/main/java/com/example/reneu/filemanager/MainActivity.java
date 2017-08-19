@@ -12,6 +12,8 @@ import android.widget.Toast;
 public class MainActivity extends Activity implements View.OnClickListener{
 
     private Button imgButton;
+    private Button spaceButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,6 +22,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
         imgButton.setOnClickListener(this);
 
+        spaceButton = (Button) findViewById(R.id.btnSpace);
+        spaceButton.setOnClickListener(this);
 
     }
 
@@ -27,12 +31,19 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     /** Called when the user taps the Send button */
     public void sendMessage(View view) {
-        Intent intent = new Intent(this, MyImgActivity.class);
-        //EditText editText = (EditText) findViewById(R.id.editText);
-      //  String message = editText.getText().toString();
-     //   intent.putExtra(EXTRA_MESSAGE, message);
 
-        startActivity(intent);
+        Button b = (Button) view;
+        if (b == imgButton)
+        {
+            Intent intent = new Intent(this, MyImgActivity.class);
+            startActivity(intent);
+        }
+        else
+            if (b == spaceButton)
+        {
+            Intent intent = new Intent(this, SpaceActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
