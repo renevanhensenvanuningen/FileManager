@@ -71,7 +71,7 @@ public class MyImgActivity extends Activity implements View.OnClickListener, Ada
     {
         fruits_list.clear();
         File f = new File(currentDir.getParent());
-
+        currentDir = f.getAbsoluteFile();
         if (f.canRead())
         {
             File[] files = f.listFiles();
