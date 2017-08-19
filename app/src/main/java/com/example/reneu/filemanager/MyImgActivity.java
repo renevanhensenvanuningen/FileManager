@@ -113,9 +113,12 @@ public class MyImgActivity extends Activity implements View.OnClickListener, Ada
             else
 
             {   String filename = f.getName();
+                if (filename.contains("."))
+                {
                 String ext =  filename.substring(filename.lastIndexOf(".") + 1, filename.length());
-                if (ext =="jpg")
+                if (ext.compareToIgnoreCase("jpg") == 0)
                   fruits_list.add(f.getAbsolutePath());
+                }
             }
 
         }
@@ -124,10 +127,15 @@ public class MyImgActivity extends Activity implements View.OnClickListener, Ada
 
     @Override
     public void onClick(View view) {
-        FindFiles();
+      // fruits_list = FindFiles();
 
-        File f = Environment.getDataDirectory();
-        fruits_list.add(f.getAbsolutePath());
+       // File f = Environment.getDataDirectory();
+       // fruits_list.add(f.getAbsolutePath());
+        File[] fs = new File[1];
+        File f = Environment.getExternalStorageDirectory();
+        fs[0] = f;
+        findRecursive(fs);
+
         if (f.isDirectory())
         {
             if (f.canRead())
@@ -136,7 +144,7 @@ public class MyImgActivity extends Activity implements View.OnClickListener, Ada
                 for (File fi: files
                      )
                 {
-                    fruits_list.add(fi.getAbsolutePath());
+                 //   fruits_list.add(fi.getAbsolutePath());
                 }
 
             }
@@ -154,7 +162,7 @@ public class MyImgActivity extends Activity implements View.OnClickListener, Ada
                     for (File fi: files
                             )
                     {
-                        fruits_list.add(fi.getAbsolutePath());
+                 //     fruits_list.add(fi.getAbsolutePath());
                     }
 
                 }
