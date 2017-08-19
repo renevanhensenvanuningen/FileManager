@@ -1,0 +1,24 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlspace"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".MainActivity"
+    android:background="#d6cd7b"
+    >
+
+    <Button
+        android:id="@+id/btnDirUpSpace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Directory Up" />
+
+
+    <ListView
+        android:id="@+id/lvSpace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+</RelativeLayout>
