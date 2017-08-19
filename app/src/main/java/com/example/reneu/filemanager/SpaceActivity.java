@@ -26,12 +26,12 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
 
 
     // Create a List from String Array elements
-    private List<String> fruits_list;
+    private ArrayList<FileModel> file_list;
     private ListView lv;
     private File currentDir;
 
     // Create an ArrayAdapter from List
-    private ArrayAdapter<String> arrayAdapter;
+    private FileModelAdapter arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +42,16 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
         lv = (ListView) findViewById(R.id.lvSpace);
 
 
-        final Button btnUp = (Button) findViewById(R.id.btnDirUpSpace);
-        btnUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doButtonUp();
-            }
-        });
+        //    final Button btnUp = (Button) findViewById(R.id.btnDirUpSpace);
+        //   btnUp.setOnClickListener(new View.OnClickListener() {
+        //       @Override
+        //       public void onClick(View view) {
+        //           doButtonUp();
+        //        }
+        //   });
 
-        fruits_list = new ArrayList<String>();
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, fruits_list);
+        file_list = new ArrayList<FileModel>();
+        arrayAdapter = new FileModelAdapter(this, file_list);
         lv.setOnItemClickListener(this);
 
         // Initializing a new String Array
@@ -68,7 +68,7 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
 
     private void doButtonUp()
     {
-        fruits_list.clear();
+        file_list.clear();
         File f = new File(currentDir.getParent());
         currentDir = f.getAbsoluteFile();
         if (f.canRead())
@@ -77,7 +77,7 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
             for (File fi: files
                     )
             {
-                fruits_list.add(fi.getAbsolutePath());
+                file_list.add(new FileModel(fi.getName(), fi.getAbsolutePath(), f.length()));
             }
         }
         //   File f = Environment.
@@ -116,7 +116,7 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
                 {
                     String ext =  filename.substring(filename.lastIndexOf(".") + 1, filename.length());
                     if (ext.compareToIgnoreCase("jpg") == 0)
-                        fruits_list.add(f.getAbsolutePath());
+                        file_list.add(new FileModel(f.getName(), f.getAbsolutePath(), f.length()));
                 }
             }
 
@@ -124,49 +124,48 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
 
     }
 
-    private double findSpaceRecursive(File fs)
+    private long getDirSize(File dirs) {
+        long size = 0;
+        for (File file : dirs.listFiles()) {
+            if (file.isFile())
+                size += file.length();
+            else
+                size += getDirSize(file);
+        }
+        //   System.out.println("DIR - " + dirs+" "+ friendlyFileSize(size));
+        return size;
+
+    }
+
+    private long findSpaceRecursive(File fs)
     {
+
+        long ret = 0;
+        if (fs.isFile())
+            ret = fs.length();
+        else {
+
         if (fs.isDirectory())
         {
             File [] fis = fs.listFiles();
             for (File f: fis)
             {
-                findSpaceRecursive(f);
+                ret += findSpaceRecursive(f);
             }
-
         }
-         return (fs.getTotalSpace()/ 1024/ 1024);
+        }
+        return ret;
     }
+
 
     public void start()
     {
         File[] fs = new File[1];
         File f = Environment.getExternalStorageDirectory();
         fs[0] = f;
-        double space =  findSpaceRecursive(f);
-
-
-        String s = Environment.getExternalStorageState();
-        if (s.compareTo("mounted")==0)
-        {
-            f = Environment.getExternalStorageDirectory();
-            fruits_list.add(f.getAbsolutePath());
-            fruits_list.add(Double.toString(space));
-            if (f.isDirectory())
-            {
-                if (f.canRead())
-                {
-                    File[] files = f.listFiles();
-                    for (File fi: files
-                            )
-                    {
-                        //     fruits_list.add(fi.getAbsolutePath());
-                    }
-
-                }
-            }
-
-        }
+        // long space =  getDirSize(f);
+        long space = findSpaceRecursive(f);
+        file_list.add(new FileModel(f.getName(), f.getAbsolutePath(), space));
 
         arrayAdapter.notifyDataSetChanged();
     }
@@ -182,15 +181,11 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Context context = getApplicationContext();
-        CharSequence text = "Hello toast!";
-        int duration = Toast.LENGTH_LONG;
 
-        String s = (String) adapterView.getItemAtPosition(i);
-        Toast toast = Toast.makeText(context, s, 500);
-        toast.show();
-        File f = new File(s);
-        fruits_list.clear();
+        FileModel fm = (FileModel) adapterView.getItemAtPosition(i);
+
+        File f = new File(fm.fullName);
+        file_list.clear();
         if (f.isDirectory())
         {
             currentDir = f.getAbsoluteFile();
@@ -198,7 +193,7 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
                 File[] files = f.listFiles();
                 for (File fi : files
                         ) {
-                    fruits_list.add(fi.getAbsolutePath());
+                    file_list.add(new FileModel(fi.getName(), fi.getAbsolutePath(), findSpaceRecursive(fi)));
                 }
                 arrayAdapter.notifyDataSetChanged();
             }
@@ -209,34 +204,6 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
 
 
 
-    private List<String> FindFiles() {
-        File mFile=Environment.getExternalStorageDirectory();
-        SD_CARD_ROOT=mFile.toString();
-
-        final List<String> tFileList = new ArrayList<String>();
-        Resources resources = getResources();
-        // array of valid image file extensions
-        String[] imageTypes = resources.getStringArray(R.array.image);
-        FilenameFilter[] filter = new FilenameFilter[imageTypes.length];
-
-        int i = 0;
-        for (final String type : imageTypes) {
-            filter[i] = new FilenameFilter() {
-                public boolean accept(File dir, String name) {
-                    return name.endsWith("." + type);
-                }
-            };
-            i++;
-        }
-
-        FileUtils fileUtils = new FileUtils();
-        File[] allMatchingFiles = fileUtils.listFilesAsArray(
-                new File(SD_CARD_ROOT), filter, 1);
-        for (File f : allMatchingFiles) {
-            tFileList.add(f.getAbsolutePath());
-        }
-        return tFileList;
-    }
 
 
 

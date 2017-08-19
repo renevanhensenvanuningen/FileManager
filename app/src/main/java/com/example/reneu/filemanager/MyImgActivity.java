@@ -33,6 +33,16 @@ public class MyImgActivity extends Activity implements View.OnClickListener, Ada
     // Create an ArrayAdapter from List
     private ArrayAdapter<String> arrayAdapter;
 
+    public static boolean isExternalStorageReadOnly() {
+        String extStorageState = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState);
+    }
+
+    public static boolean isExternalStorageAvailable() {
+        String extStorageState = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(extStorageState);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -216,8 +226,6 @@ public class MyImgActivity extends Activity implements View.OnClickListener, Ada
 
     }
 
-
-
     private List<String> FindFiles() {
         File mFile=Environment.getExternalStorageDirectory();
         SD_CARD_ROOT=mFile.toString();
@@ -245,23 +253,5 @@ public class MyImgActivity extends Activity implements View.OnClickListener, Ada
             tFileList.add(f.getAbsolutePath());
         }
         return tFileList;
-    }
-
-
-
-    public static boolean isExternalStorageReadOnly() {
-        String extStorageState = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean isExternalStorageAvailable() {
-        String extStorageState = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
-            return true;
-        }
-        return false;
     }
 }
