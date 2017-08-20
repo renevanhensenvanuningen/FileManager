@@ -192,6 +192,19 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
 
         File f = new File(fm.fullName);
         file_list.clear();
+        if (f.isDirectory()) {
+            reloadListView(f);
+        }
+        else if (f.isFile()) {
+            Intent intent = new Intent(this, ImageviewExample.class);
+            intent.putExtra("filename", f.getAbsoluteFile());
+            startActivity(intent);
+        }
+    }
+
+    private void reloadListView(File f)
+    {
+        file_list.clear();
         if (f.isDirectory())
         {
             currentDir = f.getAbsoluteFile();
@@ -203,11 +216,23 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
                 }
                 arrayAdapter.notifyDataSetChanged();
             }
-        } else if (f.isFile()) {
-            Intent intent = new Intent(this, ImageviewExample.class);
-            intent.putExtra("filename", f.getAbsoluteFile());
-            startActivity(intent);
         }
+
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        String curDir = savedInstanceState.getString("currentdir");
+        currentDir = new File(curDir);
+        reloadListView(currentDir);
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        outState.putString("CURRENTDIR", currentDir.getAbsolutePath());
+        super.onSaveInstanceState(outState);
 
     }
 
