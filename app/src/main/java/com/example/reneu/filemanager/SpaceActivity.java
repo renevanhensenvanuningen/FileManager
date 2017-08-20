@@ -1,6 +1,7 @@
 package com.example.reneu.filemanager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.app.Activity;
@@ -42,13 +43,13 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
         lv = (ListView) findViewById(R.id.lvSpace);
 
 
-        //    final Button btnUp = (Button) findViewById(R.id.btnDirUpSpace);
-        //   btnUp.setOnClickListener(new View.OnClickListener() {
-        //       @Override
-        //       public void onClick(View view) {
-        //           doButtonUp();
-        //        }
-        //   });
+        final Button btnUp = (Button) findViewById(R.id.btnDirUpSpace);
+        btnUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doButtonUp();
+            }
+        });
 
         file_list = new ArrayList<FileModel>();
         arrayAdapter = new FileModelAdapter(this, file_list);
@@ -166,16 +167,21 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
         // long space =  getDirSize(f);
         long space = findSpaceRecursive(f);
         file_list.add(new FileModel(f.getName(), f.getAbsolutePath(), space));
-
+        //  f = Environment.getRootDirectory();
+        //  space = findSpaceRecursive(f);
+        // file_list.add(new FileModel(f.getName(), f.getAbsolutePath(), space));
         arrayAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onClick(View view) {
-        // fruits_list = FindFiles();
 
-        // File f = Environment.getDataDirectory();
-        // fruits_list.add(f.getAbsolutePath());
+        file_list.clear();
+        File f = currentDir;
+        long space = findSpaceRecursive(f);
+        file_list.add(new FileModel(f.getName(), f.getAbsolutePath(), space));
+
+        arrayAdapter.notifyDataSetChanged();
 
     }
 
@@ -197,8 +203,11 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
                 }
                 arrayAdapter.notifyDataSetChanged();
             }
+        } else if (f.isFile()) {
+            Intent intent = new Intent(this, ImageviewExample.class);
+            intent.putExtra("filename", f.getAbsoluteFile());
+            startActivity(intent);
         }
-
 
     }
 

@@ -12,6 +12,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity implements View.OnClickListener{
 
     private Button imgButton;
+    private Button imgButtonExample;
     private Button spaceButton;
 
     @Override
@@ -19,8 +20,14 @@ public class MainActivity extends Activity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imgButton = (Button) findViewById(R.id.btnImg);
-
         imgButton.setOnClickListener(this);
+
+        imgButtonExample = (Button) findViewById(R.id.btnImgEx);
+
+
+        imgButtonExample.setOnClickListener(this);
+
+
 
         spaceButton = (Button) findViewById(R.id.btnSpace);
         spaceButton.setOnClickListener(this);
@@ -42,6 +49,10 @@ public class MainActivity extends Activity implements View.OnClickListener{
             if (b == spaceButton)
         {
             Intent intent = new Intent(this, SpaceActivity.class);
+            startActivity(intent);
+        }
+        if (b == imgButtonExample) {
+            Intent intent = new Intent(this, ImageviewExample.class);
             startActivity(intent);
         }
     }
