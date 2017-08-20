@@ -17,6 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MyImgActivity"></activity>
+        <activity android:name=".SpaceActivity"></activity>
+        <activity android:name=".ImageviewExample"></activity>
     </application>
 
 </manifest>
