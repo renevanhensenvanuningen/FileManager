@@ -7,7 +7,7 @@
     android:weightSum="1">
 
     <Button
-        android:id="@+id/loadImage"
+        android:id="@+id/btnLoadImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.17"
