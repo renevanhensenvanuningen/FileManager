@@ -27,22 +27,23 @@ public class ImageviewExample extends Activity implements View.OnClickListener {
         Bundle bundle = getIntent().getExtras();
 
         if (bundle.get("filename") != null) {
-            fileName = (String) bundle.get("filename").toString();
+            fileName = bundle.get("filename").toString();
         }
+
 
         Button b = (Button) findViewById(R.id.btnLoadImage);
         b.setOnClickListener(this);
-
-    }
-
-    @Override
-    public void onClick(View view) {
         File imgfile = new File(fileName);
 
 
         Bitmap myBitmap = BitmapFactory.decodeFile(imgfile.getAbsolutePath());
 
         imgView.setImageBitmap(myBitmap);
+
+    }
+
+    @Override
+    public void onClick(View view) {
 
     }
 }

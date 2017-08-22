@@ -62,7 +62,7 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
 
         // DataBind ListView with items from ArrayAdapter
         lv.setAdapter(arrayAdapter);
-        start();
+
 
 
     }
@@ -221,8 +221,20 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
     }
 
     @Override
+    public void onResume() {
+        // reloadListView(currentDir);
+        super.onResume();
+
+        if (currentDir != null) {
+            reloadListView(currentDir);
+        } else
+            start();
+    }
+
+
+    @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        String curDir = savedInstanceState.getString("currentdir");
+        String curDir = savedInstanceState.getString("CURRENTDIR");
         currentDir = new File(curDir);
         reloadListView(currentDir);
     }
