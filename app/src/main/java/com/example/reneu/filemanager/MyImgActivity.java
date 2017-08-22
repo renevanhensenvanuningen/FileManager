@@ -1,5 +1,7 @@
 package com.example.reneu.filemanager;
 
+//http://www.androidinterview.com/android-custom-listview-with-image-and-text-using-arrayadapter/
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
