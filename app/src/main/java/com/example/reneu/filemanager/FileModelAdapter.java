@@ -31,13 +31,13 @@ public class FileModelAdapter extends ArrayAdapter<FileModel> {
         FileModel fm = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_filemodel, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.image_listview, parent, false);
         }
         // Lookup view for data population
-        TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
-        TextView tvSize = (TextView) convertView.findViewById(R.id.tvSize);
-
-        convertView.findViewById(R.id.imageView);
+        TextView tvName = (TextView) convertView.findViewById(R.id.filename);
+        TextView tvSize = (TextView) convertView.findViewById(R.id.filesize);
+        imgView = (ImageView) convertView.findViewById(R.id.icon);
+        // convertView.findViewById(R.id.imageView);
         // Populate the data into the template view using the data object
         tvName.setText(fm.name);
         tvSize.setText(fm.size);
@@ -45,10 +45,10 @@ public class FileModelAdapter extends ArrayAdapter<FileModel> {
 
         File imgfile = new File(fm.fullName);
 
-
-        Bitmap myBitmap = BitmapFactory.decodeFile(imgfile.getAbsolutePath());
-
-        imgView.setImageBitmap(myBitmap);
+        if (fm.fullName.contains("jpg")) {
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgfile.getAbsolutePath());
+            imgView.setImageBitmap(myBitmap);
+        }
 
         return convertView;
     }

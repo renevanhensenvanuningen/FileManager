@@ -13,7 +13,14 @@
         android:layout_marginTop="5dp" />
 
     <TextView
-        android:id="@+id/Itemname"
+        android:id="@+id/filename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/filesize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
