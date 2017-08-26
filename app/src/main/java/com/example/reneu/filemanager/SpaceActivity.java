@@ -191,13 +191,21 @@ public class SpaceActivity extends Activity implements View.OnClickListener, Ada
         FileModel fm = (FileModel) adapterView.getItemAtPosition(i);
 
         File f = new File(fm.fullName);
-        file_list.clear();
+
         if (f.isDirectory()) {
             reloadListView(f);
         }
         else if (f.isFile()) {
             Intent intent = new Intent(this, ImageviewExample.class);
-            intent.putExtra("filename", f.getAbsoluteFile());
+            ArrayList<String> sl = new ArrayList<>();
+
+            for (FileModel fm1 : file_list) {
+                sl.add(fm1.fullName);
+
+            }
+            intent.putExtra("filenames", sl);
+            intent.putExtra("index", new Integer(i));
+
             startActivity(intent);
         }
     }
